@@ -1,0 +1,78 @@
+/* body {
+    background-color: antiquewhite;
+}
+ */
+
+
+ .navbar {
+    height: 5rem;
+    background-color: white;
+ }
+
+ .fa-compass{
+    color: #fe424d;
+    font-size: 2rem;
+ }
+
+ .nav-link {
+    color: #222222 !important;
+ }
+
+ .footer {
+  background-color: #f2f2f2;
+}
+
+.footer i {
+  font-size: 18px;
+}
+
+.footer a:hover {
+  text-decoration: none;
+  opacity: 0.7;
+}
+.listing-card {
+  border-radius: 16px;
+  overflow: hidden;
+  transition: transform 0.2s ease;
+}
+
+.listing-card:hover {
+  transform: translateY(-5px);
+}
+
+.listing-img {
+  height: 220px;
+  object-fit: cover;
+}
+
+.card-body h6 {
+  font-weight: 600;
+}
+form {
+  background: #fff;
+  padding: 25px;
+  border-radius: 12px;
+  box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+}
+
+label {
+  font-weight: 600;
+}
+form {
+  background: #fff;
+  padding: 25px;
+  border-radius: 12px;
+  box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+}
+
+label {
+  font-weight: 600;
+}
+.listing-show-img {
+  height: 320px;
+  width: 100%;
+  object-fit: cover;
+}
+
+
+

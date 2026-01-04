@@ -24,7 +24,9 @@ app.set("view engine", "ejs");
 app.set("views",path.join(__dirname, "views"));
 app.use(express.urlencoded({extended: true}));
 app.use(methodOverride("_method"));
-app.engine("ejs", ejs);
+app.engine("ejs", ejsMate);
+app.use(express.static(path.join(__dirname, "/public")));
+
 
 app.get("/", (req,res) => {
     res.send("Hi , i am root");
@@ -99,6 +101,12 @@ app.delete("/listings/:id", async (req, res) => {
   console.log(deletedListing);
   res.redirect("/listings");
 });
+
+// //REDIRECT WHEN CLICK ON IMG
+// app.get("/listings/:id", async (req, res) => {
+//   const listing = await Listing.findById(req.params.id);
+//   res.render("listings/show", { listing });
+// });
 
 
 app.listen(8080, () => {
