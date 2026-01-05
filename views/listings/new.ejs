@@ -1,4 +1,4 @@
- <% layout("layouts/boilerplate") %>
+
 <% layout("layouts/boilerplate") %>
 
 <div class="row justify-content-center">
@@ -6,16 +6,20 @@
 
     <h2 class="mb-4 text-center">Create a New Listing</h2>
 
-    <form action="/listings" method="POST">
+    <form action="/listings" method="POST" novalidate class="needs-validation">
 
       <div class="form-group">
         <label>Title</label>
         <input type="text" name="listing[title]" class="form-control" placeholder="Add a catchy title" required>
+      <div class="valid-feedback">Title looks good!</div>
+      <div class="invalid-feedback">Please enter Valid Title Name</div>
       </div>
 
       <div class="form-group">
         <label>Description</label>
         <textarea name="listing[description]" class="form-control" rows="3" required></textarea>
+      <div class="valid-feedback">Description looks good!</div>
+      <div class="invalid-feedback">Description must be at least 10 characters.</div>
       </div>
 
       <div class="form-group">
@@ -27,17 +31,24 @@
         <div class="form-group col-md-6">
           <label>Price</label>
           <input type="number" name="listing[price]" class="form-control" required>
+         <div class="valid-feedback">Price is valid!</div>
+    <div class="invalid-feedback">Price must be greater than 0.</div>
         </div>
 
         <div class="form-group col-md-6">
           <label>Country</label>
           <input type="text" name="listing[country]" class="form-control" required>
+        <div class="valid-feedback">Country looks good!</div>
+    <div class="invalid-feedback">Country must be at least 3 characters.</div>
         </div>
+       
       </div>
 
       <div class="form-group">
         <label>Location</label>
         <input type="text" name="listing[location]" class="form-control" required>
+      <div class="valid-feedback">Location looks good!</div>
+    <div class="invalid-feedback">Location must be at least 3 characters.</div>
       </div>
 
       <button class="btn btn-danger px-4 mt-3">Add</button>
