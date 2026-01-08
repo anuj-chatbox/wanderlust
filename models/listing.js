@@ -1,4 +1,7 @@
 const mongoose = require("mongoose");
+const review = require("./review");
+const { ref } = require("node:process");
+const Review = require("./review");// to handle cascading delete
 
 const Schema = mongoose.Schema;
 
@@ -19,7 +22,16 @@ const listingSchema= new Schema ({
     price:Number,
     location:String,
     country:String,
+    reviews: [{ type: Schema.Types.ObjectId, ref: "Review" }]
 });
 
+listingSchema.post("findOneAndDelete", async  (listing) => {// to handle cascading delete
+
+    if(listing) {// if listing found to delete
+        await Review.deleteMany({
+            _id: {  $in: listing.reviews }// delete all reviews whose _id is in listing.reviews array
+        });
+    }  
+});
 const Listing =mongoose.model("Listing", listingSchema);
 module.exports = Listing;
