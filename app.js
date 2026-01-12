@@ -9,8 +9,15 @@ const ejsMate = require("ejs-mate")
 // const { listingSchema, reviewSchema } = require("./schema.js");
 const ExpressError = require("./utils/ExpressError.js");
 const review = require("./models/review.js");
-const listings = require("./routes/listing.js");
-const reviews = require("./routes/review.js");
+const listingRouter = require("./routes/listing.js");
+const reviewRouter = require("./routes/review.js");
+const session = require("express-session");
+const flash = require("connect-flash");
+const passport = require("passport");
+const LocalStrategy = require("passport-local");
+const User = require("./models/user.js");
+const userRouter = require("./routes/user.js");
+
 
 
 
@@ -34,14 +41,43 @@ app.use(methodOverride("_method"));
 app.engine("ejs", ejsMate);
 app.use(express.static(path.join(__dirname, "/public")));
 
+const sessionOptions = {
+    secret: "mysupersecretcode",// for signing session id cookie
+    resave: false,// don't save session if unmodified
+    saveUninitialized: true,// don't create session until something stored
+    cookie: {
+        express: Date.now() + 1000 * 60 * 60 * 24 * 7,
+        maxAge: 1000 * 60 * 60 * 24 * 7,
+        httpOnly: true,
+    },
+};
 
 app.get("/", (req, res) => {
     res.send("Hi , i am root");
 });
 
+app.use(session(sessionOptions));
+app.use(flash());
+app.use(passport.initialize());
+app.use(passport.session());// persistent login sessions
+passport.use(new LocalStrategy(User.authenticate()));
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());   
+
+app.use((req, res, next) => {
+    res.locals.success = req.flash("success");
+    res.locals.error = req.flash("error");
+    next();
+});
 
 
-  
+
+
+
+
+
+
+
 
 // app.get("/testListing", async (req,res) => {
 //  let samplelisting = new Listing({
@@ -71,14 +107,14 @@ app.get("/", (req, res) => {
 //ERROR MIDDLEWARE
 app.use((err, req, res, next) => {
     const status = err.status || 500;
-const message = err.message || "Something Went Wrong";
-// res.status(status).send(message);
-res.status(status).render("error.ejs", { message });
+    const message = err.message || "Something Went Wrong";
+    // res.status(status).send(message);
+    res.status(status).render("error.ejs", { message });
 })
 
-app.use("/listings", listings); //using listing routes
-app.use("/listings/:id/reviews", reviews); //using review routes     
-
+app.use("/listings", listingRouter); //using listing routes
+app.use("/listings/:id/reviews", reviewRouter); //using review routes     
+app.use("/",userRouter); //using user routes
 
 // FOR ALL RANDOM URLS
 app.use((req, res, next) => {

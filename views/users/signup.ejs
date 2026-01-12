@@ -1,0 +1,44 @@
+<% layout("layouts/boilerplate") %>
+
+<div class="container mt-5">
+
+  <div class="text-center mb-4">
+    <h1 class="fw-bold text-primary">Wanderlust</h1>
+    <p class="text-muted">Create your free account and start exploring</p>
+  </div>
+
+  <div class="row justify-content-center">
+    <div class="col-md-5">
+
+      <div class="card shadow p-4 rounded-4">
+        <h4 class="text-center mb-4">Sign Up</h4>
+
+        <form action="/signup" method="POST">
+
+          <div class="mb-3">
+            <label class="form-label">Username</label>
+            <input type="text" name="username" class="form-control" required>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label">Email</label>
+            <input type="email" name="email" class="form-control" required>
+          </div>
+
+          <div class="mb-4">
+            <label class="form-label">Password</label>
+            <input type="password" name="password" class="form-control" required>
+          </div>
+
+          <button class="btn btn-primary w-100">Create Account</button>
+
+          <p class="text-center mt-3">
+            Already have an account? <a href="/login">Login</a>
+          </p>
+
+        </form>
+      </div>
+
+    </div>
+  </div>
+</div>
