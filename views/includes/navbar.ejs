@@ -1,6 +1,8 @@
 <nav class="navbar navbar-expand-md navbar-light bg-light border-bottom sticky-top">
   <div class="container">
-    <a class="navbar-brand font-weight-bold" href="/"><i class="fa-regular fa-compass"></i></a>
+    <a class="navbar-brand font-weight-bold" href="/">
+      <i class="fa-regular fa-compass"></i>
+    </a>
 
     <button class="navbar-toggler" type="button"
       data-toggle="collapse"
@@ -8,26 +10,48 @@
       aria-controls="mainNav"
       aria-expanded="false"
       aria-label="Toggle navigation">
-
       <span class="navbar-toggler-icon"></span>
     </button>
 
     <div class="collapse navbar-collapse" id="mainNav">
       <ul class="navbar-nav mr-auto">
-
-        <li class="nav-item ">
+        <li class="nav-item">
           <a class="nav-link" href="/">Home</a>
         </li>
 
         <li class="nav-item">
-          <a class="nav-link" href="/listings">All Listing</a>
+          <a class="nav-link" href="/listings">All Listings</a>
         </li>
 
         <li class="nav-item">
-          <a class="nav-link" href="/listings/new">Create New Listing</a>
+          <a class="nav-link" href="/listings/new">Create Listing</a>
         </li>
+      </ul>
 
-        
+      <!-- Right side buttons -->
+      <ul class="navbar-nav ml-auto">
+
+        <!-- Show when NOT logged in -->
+        <% if (!currentUser) { %>
+          <li class="nav-item">
+            <a class="btn btn-outline-primary mr-2" href="/signup">Sign-up</a>
+          </li>
+
+          <li class="nav-item">
+            <a class="btn btn-primary" href="/login">Login</a>
+          </li>
+        <% } %>
+
+        <!-- Show when logged in -->
+        <% if (currentUser) { %>
+          <li class="nav-item mr-3 d-flex align-items-center">
+            <span class="text-muted">Hello, <%= currentUser.username %></span>
+          </li>
+
+          <li class="nav-item">
+            <a class="btn btn-danger" href="/logout">Logout</a>
+          </li>
+        <% } %>
 
       </ul>
     </div>

@@ -17,6 +17,7 @@ const passport = require("passport");
 const LocalStrategy = require("passport-local");
 const User = require("./models/user.js");
 const userRouter = require("./routes/user.js");
+const { isLoggesIn } = require("./middleware.js");  
 
 
 
@@ -67,6 +68,10 @@ passport.deserializeUser(User.deserializeUser());
 app.use((req, res, next) => {
     res.locals.success = req.flash("success");
     res.locals.error = req.flash("error");
+    next();
+});
+app.use((req, res, next) => {
+    res.locals.currentUser = req.user;   // Passport stores logged-in user in req.user
     next();
 });
 
@@ -120,6 +125,7 @@ app.use("/",userRouter); //using user routes
 app.use((req, res, next) => {
     next(new ExpressError(404, "Page Not Found"));
 });
+
 
 app.listen(3333, () => {
     console.log("app listening");
