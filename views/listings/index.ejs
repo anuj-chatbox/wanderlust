@@ -12,7 +12,7 @@
 
         <div class="card listing-card border-0 shadow-sm">
 
-          <img src="<%= listing.image %>" class="card-img-top listing-img" alt="listing">
+          <img src="<%= listing.image?.url || listing.image %>" class="card-img-top listing-img">
 
           <div class="card-body p-2">
             <h6 class="mb-1"><%= listing.title %></h6>
