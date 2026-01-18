@@ -13,6 +13,8 @@ const { storage, cloudinary } = require("../cloudConfig.js");
 const upload = multer({ storage });
 
 
+
+
 // ================= INDEX ROUTE =================
 router.get("/", async (req, res) => {
 
