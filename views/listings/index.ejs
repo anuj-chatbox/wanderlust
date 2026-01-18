@@ -1,31 +1,248 @@
-  
-  <% layout("layouts/boilerplate") %>
+<% layout("layouts/boilerplate") %>
+  <style>
+    #filters {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .filter {
+      text-align: center;
+      margin-right: 20px;
+      margin-top: 10px;
+      opacity: 0.8;
+    }
+
+    .filter:hover {
+      opacity: 1;
+      cursor: pointer;
+    }
+
+    .filter p {
+      font-size: 14px;
+      margin: 0;
+    }
+
+    .tax-info {
+      display: none;
+    }
+
+    .tax-toggle-container {
+      display: flex;
+      align-items: center;
+      margin-left: auto;
+      margin-top: 10px;
+    }
+
+    .tax-text {
+      font-size: 14px;
+      margin-right: 8px;
+    }
+
+    /* Mobile Responsive */
+    @media only screen and (max-width: 768px) {
+
+      #filters {
+        justify-content: center;
+      }
+
+      .tax-toggle-container {
+        width: 100%;
+        justify-content: center;
+        margin-top: 15px;
+      }
+
+    }
+
+    .listing-img {
+      height: 220px;
+      object-fit: cover;
+    }
+
+    .custom-toggle {
+      position: relative;
+      display: inline-block;
+      width: 50px;
+      height: 26px;
+    }
+
+    .custom-toggle input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .toggle-slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: #e0e0e0;
+      transition: 0.3s;
+      border-radius: 30px;
+    }
+
+    .toggle-slider:before {
+      position: absolute;
+      content: "";
+      height: 20px;
+      width: 20px;
+      left: 3px;
+      bottom: 3px;
+      background-color: white;
+      transition: 0.3s;
+      border-radius: 50%;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    }
+
+    .custom-toggle input:checked+.toggle-slider {
+      background-color: #222;
+    }
+
+    .custom-toggle input:checked+.toggle-slider:before {
+      transform: translateX(24px);
+    }
+  </style>
+
+
+  <div id="filters">
+    <div class="filter">
+      <div><i class="fa-solid fa-fire"></i></div>
+      <p>Trending</p>
+    </div>
+
+    <div class="filter">
+      <div><i class="fa-solid fa-bed"></i></div>
+      <p>Rooms</p>
+    </div>
+
+    <div class="filter">
+      <div><i class="fa-solid fa-mountain"></i></div>
+      <p>Iconic cities</p>
+    </div>
+
+    <div class="filter">
+      <div><i class="fa-solid fa-mountain-city"></i></div>
+      <p>Mountains</p>
+    </div>
+
+    <div class="filter">
+      <div><i class="fa-solid fa-cow"></i></div>
+      <p>Farms</p>
+    </div>
+
+    <div class="filter">
+      <div><i class="fa-solid fa-umbrella-beach"></i></div>
+      <p>Beach</p>
+    </div>
+
+    <div class="filter">
+      <div><i class="fa-solid fa-person-swimming"></i></div>
+      <p>Amazing Pools</p>
+    </div>
+
+    <div class="filter">
+      <div><i class="fa-solid fa-snowflake"></i></div>
+      <p>Arctic</p>
+    </div>
+
+    <div class="tax-toggle-container">
+      <span class="tax-text">Display total before taxes</span>
+
+      <label class="custom-toggle">
+        <input type="checkbox" id="taxToggle">
+        <span class="toggle-slider"></span>
+      </label>
+    </div>
+
+
+  </div>
+
+
 
 
  <div class="row">
 
-  <% for(let listing of allListings){ %>
+  <% if (allListings.length === 0) { %>
 
-    <div class="col-md-4 mb-4">
+      <div class="col-12">
+        <h4 class="text-muted text-center mt-4">No listings found</h4>
+      </div>
 
-      <a href="/listings/<%= listing._id %>" class="text-decoration-none text-dark">
+  <% } else { %>
 
-        <div class="card listing-card border-0 shadow-sm">
+      <% for(let listing of allListings){ %>
 
-          <img src="<%= listing.image?.url || listing.image %>" class="card-img-top listing-img">
+          <div class="col-lg-4 col-md-6 col-sm-12 mb-4 mt-3">
 
-          <div class="card-body p-2">
-            <h6 class="mb-1"><%= listing.title %></h6>
-            <small class="text-muted">₹ <%= listing.price %> / night</small>
+            <a href="/listings/<%= listing._id %>" class="text-decoration-none text-dark">
+
+              <div class="card listing-card border-0 shadow-sm">
+
+                <img src="<%= listing.image?.url || listing.image %>" 
+                     class="card-img-top listing-img">
+
+                <div class="card-body p-2">
+                  <h6 class="mb-1">
+                    <%= listing.title %>
+                  </h6>
+
+                  <small class="text-muted">
+                    ₹ <span class="price" data-price="<%= listing.price %>">
+                      <%= listing.price %>
+                    </span> / night
+                    <i class="tax-info"> (incl. taxes)</i>
+                  </small>
+
+                </div>
+
+              </div>
+
+            </a>
+
           </div>
 
-        </div>
-
-      </a>
-
-    </div>
+      <% } %>
 
   <% } %>
 
 </div>
 
+  <script>
+
+    let toggle = document.getElementById("taxToggle");
+
+    toggle.addEventListener("click", function () {
+
+      let priceElements = document.getElementsByClassName("price");
+      let taxTexts = document.getElementsByClassName("tax-info");
+
+      for (let i = 0; i < priceElements.length; i++) {
+
+        let originalPrice = priceElements[i].getAttribute("data-price");
+
+        originalPrice = Number(originalPrice);
+
+        if (toggle.checked == true) {
+
+          let newPrice = originalPrice + (originalPrice * 18 / 100);
+
+          priceElements[i].innerHTML = Math.round(newPrice);
+
+          taxTexts[i].style.display = "inline";
+
+        } else {
+
+          priceElements[i].innerHTML = originalPrice;
+
+          taxTexts[i].style.display = "none";
+
+        }
+
+      }
+
+    });
+
+  </script>

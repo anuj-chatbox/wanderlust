@@ -1,7 +1,11 @@
+const Listing = require('../models/listing.js');
+const mbxGeocoding = require("@mapbox/mapbox-sdk/services/geocoding");
+const mapToken = process.env.MAP_TOKEN;
+const geocodingClient = mbxGeocoding({ accessToken: mapToken });
 const express = require("express");
 const router = express.Router();
 const wrapAsync = require("../utils/wrapAsync.js");
-const Listing = require('../models/listing.js');
+
 const { isLoggedIn, isOwner, validateListing } = require("../middleware.js");
 
 const multer = require("multer");
@@ -11,9 +15,28 @@ const upload = multer({ storage });
 
 // ================= INDEX ROUTE =================
 router.get("/", async (req, res) => {
-    let allListings = await Listing.find({});
+
+    let searchQuery = req.query.search;
+
+    let allListings;
+
+    if (searchQuery) {
+
+        allListings = await Listing.find({
+            $or: [
+                { location: { $regex: searchQuery, $options: "i" } },
+                { country: { $regex: searchQuery, $options: "i" } },
+                { title: { $regex: searchQuery, $options: "i" } }
+            ]
+        });
+
+    } else {
+        allListings = await Listing.find({});
+    }
+
     res.render("listings/index.ejs", { allListings });
 });
+
 
 
 // ================= NEW ROUTE =================
@@ -36,7 +59,18 @@ router.post(
             return res.redirect("/listings/new");
         }
 
+        // 1. GEOCODING PART (VERY IMPORTANT)
+        let geoData = await geocodingClient
+            .forwardGeocode({
+                query: req.body.listing.location,
+                limit: 1,
+            })
+            .send();
+
         const newListing = new Listing(req.body.listing);
+
+        // 2. SAVE GEOMETRY
+        newListing.geometry = geoData.body.features[0].geometry;
 
         newListing.image = {
             url: req.file.path,
@@ -51,6 +85,7 @@ router.post(
         res.redirect("/listings");
     })
 );
+
 
 
 // ================= SHOW ROUTE =================
@@ -70,7 +105,10 @@ router.get("/:id", async (req, res) => {
         return res.redirect("/listings");
     }
 
-    res.render("listings/show.ejs", { listing });
+    res.render("listings/show.ejs", { 
+        listing,
+        mapToken: process.env.MAP_TOKEN
+     });
 });
 
 

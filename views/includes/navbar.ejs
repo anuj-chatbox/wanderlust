@@ -1,6 +1,88 @@
-<nav class="navbar navbar-expand-md navbar-light bg-light border-bottom sticky-top">
+<style>
+
+.navbar {
+  background-color: #ffffff !important;
+}
+
+.navbar-brand i {
+  color: #fe424d;
+  font-size: 24px;
+}
+
+
+.nav-search {
+  max-width: 420px;
+  width: auto;
+}
+
+.navbar .collapse {
+  width: 100%;
+}
+
+.container {
+  overflow: hidden;
+}
+
+
+.navbar .d-flex {
+  background: transparent;
+}
+
+
+.nav-search {
+  max-width: 420px;
+  width: 100%;
+}
+
+.search-input {
+  border-radius: 25px 0 0 25px;
+  border-right: none;
+}
+
+.btn-search {
+  background-color: #fe424d;
+  color: white;
+  border: none;
+  border-radius: 0 25px 25px 0;
+  padding: 0 1rem;
+}
+
+.btn-search:hover {
+  background-color: #e63641;
+  color: white;
+}
+
+.btn-search i {
+  margin-right: 5px;
+}
+
+
+.nav-link {
+  color: #333 !important;
+  margin-right: 10px;
+}
+
+.nav-link:hover {
+  color: #fe424d !important;
+}
+
+
+@media (max-width: 768px) {
+  .nav-search {
+    margin-top: 10px;
+    max-width: 100%;
+  }
+}
+
+</style>
+
+
+
+<nav class="navbar navbar-expand-md navbar-light border-bottom sticky-top">
   <div class="container">
-    <a class="navbar-brand font-weight-bold" href="/">
+
+    <!-- LOGO -->
+    <a class="navbar-brand font-weight-bold" href="/listings">
       <i class="fa-regular fa-compass"></i>
     </a>
 
@@ -14,46 +96,64 @@
     </button>
 
     <div class="collapse navbar-collapse" id="mainNav">
-      <ul class="navbar-nav mr-auto">
-        <li class="nav-item">
-          <a class="nav-link" href="/">Home</a>
-        </li>
 
+     
+      <ul class="navbar-nav me-auto">
         <li class="nav-item">
-          <a class="nav-link" href="/listings">All Listings</a>
-        </li>
-
-        <li class="nav-item">
-          <a class="nav-link" href="/listings/new">Create Listing</a>
+          <a class="nav-link" href="/listings">Explore</a>
         </li>
       </ul>
 
-      <!-- Right side buttons -->
-      <ul class="navbar-nav ml-auto">
+      
+     <form class="d-flex nav-search mx-auto" role="search" action="/listings" method="GET">
 
-        <!-- Show when NOT logged in -->
+  <input 
+    class="form-control search-input"
+    type="search"
+    name="search"
+    placeholder="Search Destination"
+  />
+
+  <button class="btn btn-search" type="submit">
+    <i class="fa-solid fa-magnifying-glass"></i> Search
+  </button>
+
+</form>
+
+
+    
+      <ul class="navbar-nav ms-auto">
+
+        <li class="nav-item">
+          <a class="nav-link" href="/listings/new">Airbnb your home</a>
+        </li>
+
         <% if (!currentUser) { %>
+
           <li class="nav-item">
-            <a class="btn btn-outline-primary mr-2" href="/signup">Sign-up</a>
+            <a class="btn btn-outline-primary me-2" href="/signup">Sign-up</a>&nbsp;&nbsp;
           </li>
 
           <li class="nav-item">
             <a class="btn btn-primary" href="/login">Login</a>
           </li>
+
         <% } %>
 
-        <!-- Show when logged in -->
         <% if (currentUser) { %>
-          <li class="nav-item mr-3 d-flex align-items-center">
-            <span class="text-muted">Hello, <%= currentUser.username %></span>
+
+          <li class="nav-item me-3 d-flex align-items-center">
+            <span class="text-muted">Hello, <%= currentUser.username %>&nbsp;</span>
           </li>
 
           <li class="nav-item">
             <a class="btn btn-danger" href="/logout">Logout</a>
           </li>
+
         <% } %>
 
       </ul>
+
     </div>
   </div>
 </nav>
