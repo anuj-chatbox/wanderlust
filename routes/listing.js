@@ -107,10 +107,12 @@ router.get("/:id", async (req, res) => {
         req.flash("error", "Cannot find that listing!");
         return res.redirect("/listings");
     }
+console.log("MAP TOKEN CHECK:", process.env.MAP_TOKEN);
 
     res.render("listings/show.ejs", { 
         listing,
         mapToken: process.env.MAP_TOKEN
+        
      });
 });
 
