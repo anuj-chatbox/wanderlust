@@ -97,37 +97,6 @@ app.use((req, res, next) => {
     next();
 });
 
-
-
-
-
-
-
-
-
-
-// app.get("/testListing", async (req,res) => {
-//  let samplelisting = new Listing({
-//     title: "My nnnew villa",
-//     description: "By the beech",
-//     price: 1200,
-//     location: "Calangute, Goa",
-//     country: "India",
-//  });
-
-//  await samplelisting.save();
-//  console.log("sample was saved");
-//  res.send("successfull testing")
-// });
-
-
-
-// //REDIRECT WHEN CLICK ON IMG
-// app.get("/listings/:id", async (req, res) => {
-//   const listing = await Listing.findById(req.params.id);
-//   res.render("listings/show", { listing });
-// });
-
 app.get("/", (req, res) => {
     res.redirect("/listings");
 });
