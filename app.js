@@ -78,6 +78,7 @@ const sessionOptions = {
 
 
 
+
 app.use(session(sessionOptions));
 app.use(flash());
 app.use(passport.initialize());
@@ -127,16 +128,12 @@ app.use((req, res, next) => {
 //   res.render("listings/show", { listing });
 // });
 
+app.get("/", (req, res) => {
+    res.redirect("/listings");
+});
 
 
 
-//ERROR MIDDLEWARE
-app.use((err, req, res, next) => {
-    const status = err.status || 500;
-    const message = err.message || "Something Went Wrong";
-    // res.status(status).send(message);
-    res.status(status).render("error.ejs", { message });
-})
 
 app.use("/listings", listingRouter); //using listing routes
 app.use("/listings/:id/reviews", reviewRouter); //using review routes     
@@ -145,6 +142,14 @@ app.use("/",userRouter); //using user routes
 // FOR ALL RANDOM URLS
 app.use((req, res, next) => {
     next(new ExpressError(404, "Page Not Found"));
+});
+
+//ERROR MIDDLEWARE
+app.use((err, req, res, next) => {
+    const status = err.status || 500;
+    const message = err.message || "Something Went Wrong";
+    // res.status(status).send(message);
+    res.status(status).render("error.ejs", { message });
 });
 
 
